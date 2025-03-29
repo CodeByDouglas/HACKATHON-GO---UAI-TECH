@@ -79,9 +79,10 @@ Nossa prefeitura para descarte
 correto de lixo. 🏛️♻️
 
 - 1. Cata treco: 
-Recolhe grandes volumes de resíduos inservíveis, como móveis e eletrodomésticos
+Recolhe grandes volumes de resíduos inservíveis, como móveis e eletrodomésticos 🛋️
 
-- 2. Sukatech: 
+- 2. Sukatech:
+Recebe resíduos eletrônicos e realiza a reciclagem e o recondicionamento dos mesmos 🪫
   
 """
 
@@ -115,7 +116,7 @@ Obrigado por contribuir com o futuro do mundo! 📋✅
 Confirmacao_Catatreco = """
 Para solicitar o serviço Cata-Treco vou presisar de 
 alguns dados, me mande seus dados nesse formato por
-gentileza. (Caso não possua algun dos dados de endereço
+gentileza. (Caso não possua algum dos dados de endereço
 deixar o campo em branco. )  
 
 Cep: 
@@ -129,7 +130,7 @@ CPF:
 Confirmacao_sukatech = """
 Para solicitar o serviço sukatech vou presisar de 
 alguns dados, me mande seus dados nesse formato por
-gentileza. (Caso não possua algun dos dados de endereço
+gentileza. (Caso não possua algum dos dados de endereço
 deixar o campo em branco. )  
 
 Cep: 

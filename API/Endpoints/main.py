@@ -96,24 +96,15 @@ def fluxo_de_conversa():
         
         case "Aguardando Descarte":
             if mensagem_texto == "1":
-                send_whatsapp_message(user_number, Pedir_cep_ecoponto)
-                atualizar_etapa(user_number, "Aguardando cep ecoponto")
+                send_whatsapp_message(user_number, Sucesso_ecoponto)
+                send_whatsapp_message(user_number, continuidade)
+                atualizar_etapa(user_number,"continua")
             elif mensagem_texto == "2":
                 send_whatsapp_message(user_number, Menu_material_de_descarte)
                 atualizar_etapa(user_number, "selecionando material")
             elif mensagem_texto == "3":
                 send_whatsapp_message(user_number, Menu_programas_da_prefeitura)
                 atualizar_etapa(user_number, "Aguardando programa da prefeitura")
-
-        case "Aguardando cep ecoponto":
-            if mensagem_texto == "999":
-                send_whatsapp_message(user_number, Sucesso_ecoponto)
-                fechar_sessao(user_number)
-            elif mensagem_texto == "1":
-                send_whatsapp_message(user_number, Menssagem_de_encerramento)
-                fechar_sessao(user_number)
-            else:
-                send_whatsapp_message(user_number, Cep_invalido)
 
         case "selecionando material":
             if mensagem_texto == "1":
