@@ -1,6 +1,6 @@
 from flask import request
 from .Webhook import webhook_bp
-from API.Utility.Mensagens import Menu_inicial, Pedir_cep_coleta_organica, Pedir_cep_coleta_seletiva
+from API.Utility.Mensagens import *
 from API.Utility.Message_output import send_whatsapp_message
 from Sessao import iniciar_sessao, obter_sessao, fechar_sessao, atualizar_etapa # Renomeie para 'Sessao' sem acentos
 
@@ -34,7 +34,7 @@ def Fluxo_de_Conversa():
         send_whatsapp_message(user_number, Menu_inicial)
     else:
         etapa = obter_sessao(user_number)
-        # A sintaxe match-case requer Python 3.10 ou superior
+       
         match etapa:
             case "seleção inicial":
                 # Extrai o texto da mensagem para processar a resposta
@@ -42,23 +42,60 @@ def Fluxo_de_Conversa():
                 if mensagem == "1":
                     send_whatsapp_message(user_number, Pedir_cep_coleta_organica)
                     
-                    atualizar_etapa(user_number, "aguardandocepcoletaorganica")
+                    atualizar_etapa(user_number, "Aguardando cep coleta organica")
                 elif mensagem == "2":
                     send_whatsapp_message(user_number, Pedir_cep_coleta_seletiva)
                     
-                    atualizar_etapa(user_number, "aguardandocepcoletaseletiva")
+                    atualizar_etapa(user_number, "Aguardando cep coleta seletiva")
+                  
+                elif mensagem == "3":
+                    send_whatsapp_message(user_number, Menu_descarte_de_residuos)
+                    
+                    atualizar_etapa(user_number, "Aguardando Descarte")
+                  
+                elif mensagem == "4":
+                    send_whatsapp_message(user_number, Menu_denuncia)
+                    
+                    atualizar_etapa(user_number, "Aguardando topico denuncia")
                   
            
-            case "aguardandocepcoletaorganica": 
+            case "Aguardando cep coleta organica": 
                 mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
                 if mensagem == "777":
                     send_whatsapp_message(user_number, "sua coleta é tal dia")
                     fechar_sessao(user_number)
             
-            case "aguardandocepcoletaseletiva": 
+            case "Aguardando cep coleta seletiva": 
                 mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
                 if mensagem == "888":
                     send_whatsapp_message(user_number, "sua coleta seletiva é tal dia")
+                    fechar_sessao(user_number)
+            
+            case "Aguardando Descarte": 
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "1":
+                    send_whatsapp_message(user_number, Pedir_cep_ecoponto)
+                    atualizar_etapa(user_number, "Aguardando cep ecoponto")
+
+                elif mensagem == "2":
+                    send_whatsapp_message(user_number, Menu_material_de_descarte)
+                    fechar_sessao("Aguardando material de descarte")
+                
+                elif mensagem == "3":
+                    send_whatsapp_message(user_number, Menu_programas_da_prefeitura)
+                    fechar_sessao("Aguardando programa da prefeitura")
+
+           
+            case "Aguardando topico denuncia": 
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "1":
+                    send_whatsapp_message(user_number, "sua coleta seletiva é tal dia")
+                    fechar_sessao(user_number)
+            
+            case "Aguardando cep ecoponto": 
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "999":
+                    send_whatsapp_message(user_number, "finalizado")
                     fechar_sessao(user_number)
 
                 
