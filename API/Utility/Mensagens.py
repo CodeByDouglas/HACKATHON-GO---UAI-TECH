@@ -40,7 +40,7 @@ Se precisar de ajuda com algo mais, estou por aqui.
 Tenha um ótimo dia e até a próxima!"
 """
 
-Sucesso_colete_seletiva = """
+Sucesso_coleta_seletiva = """
 "No seu bairro, a coleta seletiva é realizada todas as 
 quarta-feira no turno da manhã. 
 Se precisar de ajuda com algo mais, estou por aqui. 

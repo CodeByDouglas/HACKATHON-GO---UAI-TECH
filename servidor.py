@@ -1,6 +1,6 @@
 from flask import Flask
 from API.Endpoints.Webhook import webhook_bp
-import API.Endpoints.Message_input
+import API.Endpoints.main
 
 app = Flask(__name__)
 
