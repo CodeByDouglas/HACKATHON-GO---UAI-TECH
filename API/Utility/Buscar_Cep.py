@@ -39,7 +39,7 @@ def consultar_coleta_organica(cep_str):
     if resultado:
         return resultado[0]
     else:
-        return "Ainda não temos esse CEP registrado."
+        return "Ainda não temos esse CEP registrado. 😟"
 
 # Exemplo de uso:
 cep_input = "74461295"
@@ -87,7 +87,7 @@ def consultar_coleta_seletiva(cep_str):
     if resultado:
         return resultado[0]
     else:
-        return "Ainda não temos esse CEP registrado."
+        return "Ainda não temos esse CEP registrado. 😟"
 
 # Exemplo de uso:
 cep_input = "74461295"
