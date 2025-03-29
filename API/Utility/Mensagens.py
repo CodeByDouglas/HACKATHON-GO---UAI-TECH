@@ -1,12 +1,14 @@
-Menu_inicial = """
+Inicio_coleta_cep = """
  Olá! Eu sou o ZecoLógico, seu assistente
  virtual de sustentabilidade e meio ambiente
  do Governo de Goiânia. Que bom ter você por aqui!
  Estou aqui para te ajudar a descobrir dicas práticas,
  promover hábitos sustentáveis e conectar você aos 
  serviços públicos que fazem a diferença no nosso dia a dia.
- Vamos juntos deixar Goiás mais verde? Em que posso ajudar hoje?
+ Me informa seu CEP para eu poder te ajudar.
+"""
 
+Menu_inicial = """
 1 - Ver o turno da coleta de lixo no seu bairro.
 2 - Ver o turno da coleta seletiva no seu bairro. 
 3 - Descarte de resíduos.
@@ -150,4 +152,8 @@ Parabéns pela atitude são pessoas como você que mudan o mundo!
 
 Menssagem_de_encerramento = """
 Seção finalizada, volte sempre!
+"""
+continuidade = """
+Te ajudo em algo mais?
+1 - sim       2 - não
 """

@@ -21,10 +21,14 @@ from API.Utility.Mensagens import (
     Pedir_cep_empresa_parceira,
     Menssagem_de_encerramento,
     Sucesso_coleta_seletiva, 
-    Menu_material_de_descarte
+    Menu_material_de_descarte,
+    Inicio_coleta_cep, 
+    continuidade
 )
 from API.Utility.Envio_mensagem import send_whatsapp_message
-from API.Utility.Sessao import iniciar_sessao, obter_sessao, fechar_sessao, atualizar_etapa
+from API.Utility.Sessao import iniciar_sessao, obter_sessao, fechar_sessao, atualizar_etapa, atualizar_cep, obter_cep
+from API.Utility.Validar_Cep import cep_valido
+from API.Utility.Buscar_Cep import consultar_coleta_organica, consultar_coleta_seletiva
 
 
 @webhook_bp.route('/webhook', methods=['POST'])
@@ -50,18 +54,31 @@ def fluxo_de_conversa():
     sessao = obter_sessao(user_number)
     if sessao is None:
         iniciar_sessao(user_number)
-        send_whatsapp_message(user_number, Menu_inicial)
+        send_whatsapp_message(user_number, Inicio_coleta_cep)
         return "Ok", 200
 
     # Processa o fluxo com base na etapa da sessão
     match sessao:
+        case "incerir_cep":
+            if cep_valido(mensagem_texto):
+                send_whatsapp_message(user_number, Menu_inicial)
+                atualizar_etapa(user_number, "seleção inicial")
+                atualizar_cep(user_number, mensagem_texto)
+            elif mensagem_texto == "1": 
+                send_whatsapp_message(user_number,  Menssagem_de_encerramento)
+                fechar_sessao(user_number)
+            else:
+                send_whatsapp_message(user_number, Cep_invalido)
+        
         case "seleção inicial":
             if mensagem_texto == "1":
-                send_whatsapp_message(user_number, Pedir_cep_coleta_organica)
-                atualizar_etapa(user_number, "Aguardando cep coleta organica")
+                send_whatsapp_message(user_number, consultar_coleta_organica(obter_cep(user_number)))
+                send_whatsapp_message(user_number, continuidade)
+                atualizar_etapa(user_number, "continua")
             elif mensagem_texto == "2":
-                send_whatsapp_message(user_number, Pedir_cep_coleta_seletiva)
-                atualizar_etapa(user_number, "Aguardando cep coleta seletiva")
+                send_whatsapp_message(user_number, consultar_coleta_seletiva(obter_cep(user_number)))
+                send_whatsapp_message(user_number, continuidade)
+                atualizar_etapa(user_number, "continua")
             elif mensagem_texto == "3":
                 send_whatsapp_message(user_number, Menu_descarte_de_residuos)
                 atualizar_etapa(user_number, "Aguardando Descarte")
@@ -69,26 +86,14 @@ def fluxo_de_conversa():
                 send_whatsapp_message(user_number, Menu_denuncia)
                 atualizar_etapa(user_number, "Selecionar topico denuncia")
 
-        case "Aguardando cep coleta organica":
-            if mensagem_texto == "777":
-                send_whatsapp_message(user_number, Sucesso_coleta_oraganica)
-                fechar_sessao(user_number)
-            elif mensagem_texto == "1":
+        case "continua":
+            if mensagem_texto == "1":
+                send_whatsapp_message(user_number, Menu_inicial)
+                atualizar_etapa(user_number, "seleção inicial")
+            elif mensagem_texto == "2":
                 send_whatsapp_message(user_number, Menssagem_de_encerramento)
                 fechar_sessao(user_number)
-            else:
-                send_whatsapp_message(user_number, Cep_invalido)
-
-        case "Aguardando cep coleta seletiva":
-            if mensagem_texto == "888":
-                send_whatsapp_message(user_number, Sucesso_coleta_seletiva)
-                fechar_sessao(user_number)
-            elif mensagem_texto == "1":
-                send_whatsapp_message(user_number, Menssagem_de_encerramento)
-                fechar_sessao(user_number)
-            else:
-                send_whatsapp_message(user_number, Cep_invalido)
-
+        
         case "Aguardando Descarte":
             if mensagem_texto == "1":
                 send_whatsapp_message(user_number, Pedir_cep_ecoponto)

@@ -15,7 +15,8 @@ cursor = conexao.cursor()
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS sessoes (
         numero_usuario TEXT PRIMARY KEY,
-        etapa TEXT
+        etapa TEXT,
+        cep TEXT
     )
 ''')
 conexao.commit()
@@ -24,7 +25,7 @@ def iniciar_sessao(numero_usuario):
     """
     Inicia uma nova sessão para o usuário com a etapa inicial.
     """
-    etapa = "seleção inicial"  # Defina a etapa inicial desejada
+    etapa = "incerir_cep"  # Defina a etapa inicial desejada
     cursor.execute('''
         INSERT OR REPLACE INTO sessoes (numero_usuario, etapa)
         VALUES (?, ?)
@@ -36,6 +37,13 @@ def atualizar_etapa(numero_usuario, etapa):
     Atualiza a etapa atual da sessão do usuário.
     """
     cursor.execute('UPDATE sessoes SET etapa=? WHERE numero_usuario=?', (etapa, numero_usuario))
+    conexao.commit()
+    
+def atualizar_cep(numero_usuario, cep):
+    """
+    Atualiza a etapa atual da sessão do usuário.
+    """
+    cursor.execute('UPDATE sessoes SET cep=? WHERE numero_usuario=?', (cep, numero_usuario))
     conexao.commit()
 
 def fechar_sessao(numero_usuario):
@@ -55,3 +63,15 @@ def obter_sessao(numero_usuario):
         (etapa,) = linha
         return etapa
     return None
+
+def obter_cep(numero_usuario):
+    """
+    Retorna o CEP da sessão do usuário, se existir.
+    """
+    cursor.execute('SELECT cep FROM sessoes WHERE numero_usuario=?', (numero_usuario,))
+    linha = cursor.fetchone()
+    if linha:
+        (cep,) = linha
+        return cep
+    return None
+
