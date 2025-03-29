@@ -2,8 +2,7 @@ from flask import request
 from .Webhook import webhook_bp
 from API.Utility.Mensagens import *
 from API.Utility.Message_output import send_whatsapp_message
-from Sessao import iniciar_sessao, obter_sessao, fechar_sessao, atualizar_etapa # Renomeie para 'Sessao' sem acentos
-
+from API.Utility.Sessao import iniciar_sessao, obter_sessao, fechar_sessao, atualizar_etapa 
 @webhook_bp.route('/webhook', methods=['POST'])
 def Fluxo_de_Conversa():
     Corpo_da_mensagem = request.get_json()
@@ -56,20 +55,30 @@ def Fluxo_de_Conversa():
                 elif mensagem == "4":
                     send_whatsapp_message(user_number, Menu_denuncia)
                     
-                    atualizar_etapa(user_number, "Aguardando topico denuncia")
+                    atualizar_etapa(user_number, "Selecionar topico denuncia")
                   
            
             case "Aguardando cep coleta organica": 
                 mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
                 if mensagem == "777":
-                    send_whatsapp_message(user_number, "sua coleta é tal dia")
+                    send_whatsapp_message(user_number, Sucesso_coleta_oraganica)
                     fechar_sessao(user_number)
+                elif mensagem == "1": 
+                    send_whatsapp_message(user_number, Menssagem_de_encerramento )
+                    fechar_sessao(user_number)
+                else: 
+                    send_whatsapp_message(user_number, Cep_invalido)
             
             case "Aguardando cep coleta seletiva": 
                 mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
                 if mensagem == "888":
-                    send_whatsapp_message(user_number, "sua coleta seletiva é tal dia")
+                    send_whatsapp_message(user_number, Sucesso_colete_seletiva)
                     fechar_sessao(user_number)
+                elif mensagem == "1": 
+                    send_whatsapp_message(user_number, Menssagem_de_encerramento )
+                    fechar_sessao(user_number)
+                else: 
+                    send_whatsapp_message(user_number, Cep_invalido)
             
             case "Aguardando Descarte": 
                 mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
@@ -79,24 +88,119 @@ def Fluxo_de_Conversa():
 
                 elif mensagem == "2":
                     send_whatsapp_message(user_number, Menu_material_de_descarte)
-                    fechar_sessao("Aguardando material de descarte")
+                    atualizar_etapa(user_number, "selecionando material")
                 
                 elif mensagem == "3":
                     send_whatsapp_message(user_number, Menu_programas_da_prefeitura)
-                    fechar_sessao("Aguardando programa da prefeitura")
+                    atualizar_etapa(user_number, "Aguardando programa da prefeitura")
 
-           
-            case "Aguardando topico denuncia": 
-                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
-                if mensagem == "1":
-                    send_whatsapp_message(user_number, "sua coleta seletiva é tal dia")
-                    fechar_sessao(user_number)
-            
             case "Aguardando cep ecoponto": 
                 mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
                 if mensagem == "999":
-                    send_whatsapp_message(user_number, "finalizado")
+                    send_whatsapp_message(user_number, Sucesso_ecoponto)
                     fechar_sessao(user_number)
+                elif mensagem == "1": 
+                    send_whatsapp_message(user_number, Menssagem_de_encerramento )
+                    fechar_sessao(user_number)
+                else: 
+                    send_whatsapp_message(user_number, Cep_invalido)
+
+
+
+
+            case "selecionando material":
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "1": 
+                    send_whatsapp_message(user_number, Pedir_cep_empresa_parceira)
+                    atualizar_etapa(user_number, "Aguardando cep metal")
+                elif mensagem == "2": 
+                    send_whatsapp_message(user_number, Pedir_cep_empresa_parceira)
+                    atualizar_etapa(user_number, "Aguardando cep vidro")
+                elif mensagem == "3": 
+                    send_whatsapp_message(user_number, Pedir_cep_empresa_parceira)
+                    atualizar_etapa(user_number, "Aguardando cep papel")
+                elif mensagem == "4": 
+                    send_whatsapp_message(user_number, Pedir_cep_empresa_parceira)
+                    atualizar_etapa(user_number, "Aguardando cep plastico")
+
+            case "Aguardando cep metal":
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "555":
+                    send_whatsapp_message(user_number, Sucesso_descarte_empresa_parceira)
+                    fechar_sessao(user_number)
+                elif mensagem == "1": 
+                    send_whatsapp_message(user_number, Menssagem_de_encerramento )
+                    fechar_sessao(user_number)
+                else: 
+                    send_whatsapp_message(user_number, Cep_invalido)
+           
+            case "Aguardando cep vidro":
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "555":
+                    send_whatsapp_message(user_number, Sucesso_descarte_empresa_parceira)
+                    fechar_sessao(user_number)
+                elif mensagem == "1": 
+                    send_whatsapp_message(user_number, Menssagem_de_encerramento )
+                    fechar_sessao(user_number)
+                else: 
+                    send_whatsapp_message(user_number, Cep_invalido)
+           
+            case "Aguardando cep papel":
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "555":
+                    send_whatsapp_message(user_number, Sucesso_descarte_empresa_parceira)
+                    fechar_sessao(user_number)
+                elif mensagem == "1": 
+                    send_whatsapp_message(user_number, Menssagem_de_encerramento )
+                    fechar_sessao(user_number)
+                else: 
+                    send_whatsapp_message(user_number, Cep_invalido)
+            
+            case "Aguardando cep plastico":
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "555":
+                    send_whatsapp_message(user_number, Sucesso_descarte_empresa_parceira)
+                    fechar_sessao(user_number)
+                elif mensagem == "1": 
+                    send_whatsapp_message(user_number, Menssagem_de_encerramento )
+                    fechar_sessao(user_number)
+                else: 
+                    send_whatsapp_message(user_number, Cep_invalido)
+           
+            case "Selecionar topico denuncia": 
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "1":
+                    send_whatsapp_message(user_number, Descarte_irregular_de_lixo)
+                    atualizar_etapa(user_number, "Aguardando a Denuncia")
+
+            case "Aguardando a Denuncia":
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                send_whatsapp_message(user_number,Sucesso_denuncia)
+                fechar_sessao(user_number)
+
+            case "Aguardando programa da prefeitura":
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "1": 
+                    send_whatsapp_message(user_number, Confirmacao_Catatreco)
+                    atualizar_etapa(user_number, "Confirmar catatreco")
+                if mensagem == "2": 
+                    send_whatsapp_message(user_number, Confirmacao_sukatech)
+                    atualizar_etapa(user_number, "Confirmar sukatech")
+            
+            case "Confirmar catatreco": 
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "endereço":
+                    send_whatsapp_message(user_number, Sucesso_cata_treco)
+                    fechar_sessao(user_number)
+            
+            case "Confirmar sukatech": 
+                mensagem = Corpo_da_mensagem["entry"][0]["changes"][0]["value"]["messages"][0]["text"]["body"]
+                if mensagem == "endereço":
+                    send_whatsapp_message(user_number, Sucesso_sukatech)
+                    fechar_sessao(user_number)
+
+            
+
 
                 
     

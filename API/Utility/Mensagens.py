@@ -49,7 +49,8 @@ Tenha um ótimo dia e até a próxima!"
 
 Cep_invalido = """
 "Ops! O CEP informado é inválido. 
-Por favor, verifique os números e tente novamente."
+Por favor, verifique os números e tente novamente.
+Ou digite "1" para encerrar!
 """
 
 Pedir_cep_ecoponto = """
@@ -121,8 +122,32 @@ Complemento:
 CPF: 
 """
 
+Confirmacao_sukatech = """
+Para solicitar o serviço sukatech vou presisar de 
+alguns dados, me mande seus dados nesse formato por
+gentileza. (Caso não possua algun dos dados de endereço
+deixar o campo em branco. )  
+
+Cep: 
+Quadra: 
+Lote:
+Número: 
+Complemento: 
+CPF: 
+"""
+
 Sucesso_cata_treco = """
 "Solicitação de serviço cata-treco realizada, nossa equipe vai entrar 
 em contato como vocês para confirmar a data da retirada dos resíduos"
 Parabéns pela atitude são pessoas como você que mudan o mundo!
+"""
+
+Sucesso_sukatech= """
+"Solicitação de serviço sukatech realizada, nossa equipe vai entrar 
+em contato como vocês para confirmar a data da retirada dos resíduos"
+Parabéns pela atitude são pessoas como você que mudan o mundo!
+"""
+
+Menssagem_de_encerramento = """
+Seção finalizada, volte sempre!
 """
